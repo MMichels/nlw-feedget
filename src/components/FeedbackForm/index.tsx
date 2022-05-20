@@ -5,6 +5,7 @@ import ideaImageUrl from "../../assets/idea.svg";
 import otherImageUrl from "../../assets/other.svg";
 import { FeedbackTypeStep } from './Steps/FeedbackTypeStep';
 import { FeedbackContentStep } from './Steps/FeedbackContentStep';
+import { FeedbackSuccessStep } from './Steps/FeedbackSuccessStep';
 
 export const feedbackTypes = {
     BUG: {
@@ -36,10 +37,21 @@ export const feedbackTypes = {
 export type FeedbackType = keyof typeof feedbackTypes;
 
 export function FeedbackForm() {
-    const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+    const [feedbackType, setFeedbackType] = useState<FeedbackType | null>("BUG");
+    const [feedbackComplete, setFeedbackComplete] = useState(true);
 
     function handleRestartFeedback() {
         setFeedbackType(null);
+    }
+
+    function handleFeedbackSent(){      
+
+        setFeedbackComplete(true);       
+    }
+
+    function handleResetFeedback(){
+        setFeedbackType(null);
+        setFeedbackComplete(false);
     }
 
     return (
@@ -50,7 +62,9 @@ export function FeedbackForm() {
                 !feedbackType ? (
                     <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType}/>
                 ) : (
-                    <FeedbackContentStep feedbackType={feedbackType} onBack={handleRestartFeedback}/>
+                    !feedbackComplete ? 
+                        <FeedbackContentStep feedbackType={feedbackType} onBack={handleRestartFeedback} onFeedbackSent={handleFeedbackSent}/> :
+                        <FeedbackSuccessStep onFeedbackReset={handleResetFeedback}/>
                 )
             }
             

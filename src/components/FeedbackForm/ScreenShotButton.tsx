@@ -4,11 +4,12 @@ import { useState } from "react";
 import { Loading } from "../Loading";
 
 interface ScreenShotButtonProps {
-    onScreenshot: (screenshot?: string) => void;
-    screenshot?: string;
+    onScreenshot: (screenshot: string|null) => void;
+    screenshot: string | null;
+    disabled: boolean;
 }
 
-export function ScreenShotButton({onScreenshot, screenshot}: ScreenShotButtonProps){
+export function ScreenShotButton({onScreenshot, screenshot, disabled}: ScreenShotButtonProps){
     const [isTakingScreenshot, setIsTakingScreenshot] = useState(false);
     
 
@@ -37,6 +38,7 @@ export function ScreenShotButton({onScreenshot, screenshot}: ScreenShotButtonPro
                     backgroundImage: `url(${screenshot})`
                 }}
                 onClick={() => onScreenshot(null)}
+                disabled={disabled}
             >
                 <Trash weight="fill"></Trash>
             </button>
@@ -47,13 +49,15 @@ export function ScreenShotButton({onScreenshot, screenshot}: ScreenShotButtonPro
         
         <button
             type="button"
-            className="
+            className={`
                 p-2 bg-zinc-800 
                 rounded-md border-transparent 
                 hover:bg-zinc-700 transition-colors
                 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500
-                "
+                ` + (disabled ? " opacity-50" : "")
+            }                
             onClick={() => handleTakeScreenshot()}
+            disabled={disabled}
         >
             {
                 isTakingScreenshot ?
