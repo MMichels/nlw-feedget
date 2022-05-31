@@ -6,7 +6,7 @@ import { TouchableOpacity } from 'react-native';
 import { gestureHandlerRootHOC } from 'react-native-gesture-handler';
 import { theme } from '../../theme';
 import { IFeedbackType } from '../../utils/feedbackTypes';
-import { Form } from './Form';
+import { Form } from '../Form';
 import { Options } from './Options';
 
 import { styles } from './styles';
@@ -47,10 +47,7 @@ function Widget() {
 				handleIndicatorStyle={styles.indicator}				
 			>
 				{
-					feedbackType == null? 
-					<Options onSelectFeedbackType={handleSelectFeedbackType}/>:
-					<Form feedbackType={feedbackType} onBack={handleFormBack}/>
-
+					<Form feedbackType='BUG'/>
 				}
 			</BottomSheet>
 		</>
