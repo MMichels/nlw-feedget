@@ -8,7 +8,7 @@ import { theme } from '../../../../theme';
 import { styles } from './styles';
 
 interface ButtonProps extends TouchableOpacityProps {
-    isLoading: boolean
+    isLoading: boolean;
 }
 
 export function Button({isLoading, ...rest}: ButtonProps) {

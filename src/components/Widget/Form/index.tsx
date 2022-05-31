@@ -5,35 +5,52 @@ import {
     TextInput,
     Image,
     Text,
-    TouchableOpacity,
-    ActivityIndicator
- } from 'react-native';
+    TouchableOpacity } from 'react-native';
 import { theme } from '../../../theme';
 import { FeedbackTypeKey, feedbackTypes } from '../../../utils/feedbackTypes';
 import { Button } from './Button';
 import { ScreenshotButton } from '../ScreenshotButton';
 
 import { styles } from './styles';
+import { captureScreen } from 'react-native-view-shot';
 
 interface FormProps {
     feedbackType: FeedbackTypeKey;
     onBack: () => void;
+    onSuccess: () => void;
 }
 
-export function Form({feedbackType, onBack}:FormProps) {
+export function Form({feedbackType, onBack, onSuccess}:FormProps) {
     const feedbackTypeInfo = feedbackTypes[feedbackType];
     const [comment, setComment] = useState<string | null>(null);
     const [screenshot, setScreenShot] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [isTakingScreenshot, setIsTakingScreenshot] = useState(false);
+
 
     function handleTakeScreenShot(){
-        console.log("TakeScreenshot");
-        setScreenShot("screenshot");
+        setIsTakingScreenshot(true);
+
+        captureScreen({
+            format: 'jpg',
+            quality: 0.8
+        }).then(screenshot => {
+            setScreenShot(screenshot);
+            setIsTakingScreenshot(false);
+        }).catch(exception => {
+            console.error("Erro ao obter screenshot: ", exception);
+            setIsTakingScreenshot(false);
+        });
     }
 
     function handleRemoveScreenshot(){
         console.log("RemoveScreenshot");
         setScreenShot(null);
+    }
+
+    function handleSubmit(){
+        console.log("Feedback enviado!", {comment, screenshot});
+        onSuccess();
     }
     
 
@@ -69,26 +86,13 @@ export function Form({feedbackType, onBack}:FormProps) {
                 onTakeShot={handleTakeScreenShot}
                 onRemoveShot={handleRemoveScreenshot}            
                 screenshot={screenshot}
+                isTakingScreenshot={isTakingScreenshot}
             />
-            <TouchableOpacity 
-                style={styles.submitButton}
-                disabled={comment == null}                
-            >
-                {
-                    isLoading ? 
-                    <ActivityIndicator 
-                        color={theme.colors.text_on_brand_color}
-                    /> :
-                    <Text 
-                        style={{
-                            color: theme.colors.text_on_brand_color, 
-                            fontSize: 14,
-                            fontFamily: theme.fonts.medium
-                        }}>
-                        Enviar feedback
-                    </Text>
-                }
-            </TouchableOpacity>
+            <Button 
+                isLoading={isLoading}
+                onPress={() => handleSubmit()}
+                disabled={comment == null}
+            />
         </View>
     </View>
   );

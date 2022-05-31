@@ -10,9 +10,11 @@ import { Form } from './Form';
 import { Options } from './Options';
 
 import { styles } from './styles';
+import { Success } from './Success';
 
 function Widget() {
 	const [feedbackType, setFeedbackType] = useState<FeedbackTypeKey | null>(null);
+	const [feedbackSent, setfeedbackSent] = useState(false);
 
     const bottomSheetRef = useRef<BottomSheet>(null);
 
@@ -26,6 +28,11 @@ function Widget() {
 
 	function handleFormBack() {
 		setFeedbackType(null);
+	}
+
+	function handleEnviarOutro() {
+		setFeedbackType(null);
+		setfeedbackSent(false);
 	}
 
 	return (
@@ -47,9 +54,11 @@ function Widget() {
 				handleIndicatorStyle={styles.indicator}				
 			>
 				{
-					feedbackType ? 					
-					<Form feedbackType={feedbackType} onBack={handleFormBack}/> :
-					<Options onSelectFeedbackType={handleSelectFeedbackType}/>
+					feedbackSent ? 
+					<Success onEnviarOutro={handleEnviarOutro}/> :
+						feedbackType ? 					
+						<Form feedbackType={feedbackType} onBack={handleFormBack} onSuccess={() => setfeedbackSent(true)}/> :
+						<Options onSelectFeedbackType={handleSelectFeedbackType}/>
 				}
 			</BottomSheet>
 		</>
