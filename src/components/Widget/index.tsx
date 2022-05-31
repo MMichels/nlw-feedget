@@ -29,11 +29,16 @@ function Widget() {
 	function handleFormBack() {
 		setFeedbackType(null);
 	}
+	
+	function handleFeedbackSent(){
+		setfeedbackSent(true);
+	}
 
 	function handleEnviarOutro() {
 		setFeedbackType(null);
 		setfeedbackSent(false);
 	}
+
 
 	return (
 		<>
@@ -57,7 +62,7 @@ function Widget() {
 					feedbackSent ? 
 					<Success onEnviarOutro={handleEnviarOutro}/> :
 						feedbackType ? 					
-						<Form feedbackType={feedbackType} onBack={handleFormBack} onSuccess={() => setfeedbackSent(true)}/> :
+						<Form feedbackType={feedbackType} onBack={handleFormBack} onSuccess={handleFeedbackSent}/> :
 						<Options onSelectFeedbackType={handleSelectFeedbackType}/>
 				}
 			</BottomSheet>

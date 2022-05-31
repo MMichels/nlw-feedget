@@ -13,6 +13,7 @@ import { ScreenshotButton } from '../ScreenshotButton';
 
 import { styles } from './styles';
 import { captureScreen } from 'react-native-view-shot';
+import { Copyright } from '../Copyright';
 
 interface FormProps {
     feedbackType: FeedbackTypeKey;
@@ -24,7 +25,7 @@ export function Form({feedbackType, onBack, onSuccess}:FormProps) {
     const feedbackTypeInfo = feedbackTypes[feedbackType];
     const [comment, setComment] = useState<string | null>(null);
     const [screenshot, setScreenShot] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const [isTakingScreenshot, setIsTakingScreenshot] = useState(false);
 
 
@@ -48,9 +49,17 @@ export function Form({feedbackType, onBack, onSuccess}:FormProps) {
         setScreenShot(null);
     }
 
-    function handleSubmit(){
-        console.log("Feedback enviado!", {comment, screenshot});
-        onSuccess();
+    async function handleSubmit(){
+        setIsSendingFeedback(true);
+
+        try {
+            
+        } catch (error) {
+            console.error("Erro ao enviar feedback: ", error);
+            setIsSendingFeedback(false);
+        }
+
+
     }
     
 
@@ -89,11 +98,12 @@ export function Form({feedbackType, onBack, onSuccess}:FormProps) {
                 isTakingScreenshot={isTakingScreenshot}
             />
             <Button 
-                isLoading={isLoading}
+                isLoading={isSendingFeedback}
                 onPress={() => handleSubmit()}
-                disabled={comment == null}
+                disabled={comment == null || isSendingFeedback}
             />
         </View>
+        <Copyright />
     </View>
   );
 }

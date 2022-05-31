@@ -8,8 +8,7 @@ export const styles = StyleSheet.create({
   },
   header: {
       flexDirection: 'row',
-      marginVertical: 16,
-
+      marginTop: 16,
   },
   titleContainer: {
       flex: 1,
@@ -30,8 +29,8 @@ export const styles = StyleSheet.create({
   },
   input: {
       height: 112,
-      padding: 12,
-      marginBottom: 8,
+      padding: 12,      
+      marginVertical: 8,
       borderRadius: 4,
       borderWidth: 1,
       borderColor: theme.colors.stroke,
@@ -46,7 +45,6 @@ export const styles = StyleSheet.create({
   action: {            
       flexDirection: 'row',
       alignItems: 'center',
-    
       marginBottom: 16
   },
   submitButton: {
@@ -61,7 +59,7 @@ export const styles = StyleSheet.create({
       
       borderRadius: 4,
       
-      paddingVertical: 8,
+      paddingTop: 8,
       paddingHorizontal: 24,
   }
 });
