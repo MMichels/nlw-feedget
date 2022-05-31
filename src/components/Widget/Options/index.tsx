@@ -2,23 +2,19 @@ import React from 'react';
 import { View, Text } from 'react-native';
 import { FeedbackTypeKey, feedbackTypes, IFeedbackType } from '../../../utils/feedbackTypes';
 import { Copyright } from '../Copyright';
-import { Option } from '../Option';
+import { Option } from './Option';
 
 import { styles } from './styles';
 
 interface OptionsProps {
-    onSelectFeedbackType: (feedbackType: IFeedbackType) => void;
+    onSelectFeedbackType: (feedbackType: FeedbackTypeKey) => void;
 }
 
 
 export function Options({onSelectFeedbackType} : OptionsProps) {
 
     function handleOptionSelected(key: FeedbackTypeKey) {
-        var feedbackType = feedbackTypes[key];
-        onSelectFeedbackType({
-            image: feedbackType.image,
-            title: feedbackType.title
-        });
+        onSelectFeedbackType(key);
     }
 
 

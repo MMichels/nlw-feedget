@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../../theme';
+import { theme } from '../../../theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -42,5 +42,26 @@ export const styles = StyleSheet.create({
   footer: {
       flexDirection: 'row',
       marginBottom: 16
+  },
+  action: {            
+      flexDirection: 'row',
+      alignItems: 'center',
+    
+      marginBottom: 16
+  },
+  submitButton: {
+      flex: 1,
+      width: '100%',
+      
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: theme.colors.brand,
+      color: theme.colors.text_on_brand_color,      
+      
+      borderRadius: 4,
+      
+      paddingVertical: 8,
+      paddingHorizontal: 24,
   }
 });

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { theme } from '../../theme';
+import { theme } from '../../../theme';
 
 export const styles = StyleSheet.create({
   container: {
@@ -11,6 +11,10 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 8,
     position: 'relative'
+  },
+  image: {
+    width: 40,
+    height: 40
   },
   removeIcon: {
       position: 'absolute',
