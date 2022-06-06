@@ -1,7 +1,10 @@
-import { ArrowLeft, Camera } from "phosphor-react";
+import { ArrowLeft } from "phosphor-react";
 import { FormEvent, useState } from "react";
 import { FeedbackType, feedbackTypes } from "..";
+import { FeedbackService } from "../../../services/feedbackService";
 import { CloseButton } from "../../CloseButton";
+import Error from "../../Error";
+import { Loading } from "../../Loading";
 import { ScreenShotButton } from "../ScreenShotButton";
 
 interface FeedbackContentStepProps {
@@ -14,18 +17,34 @@ interface FeedbackContentStepProps {
 export function FeedbackContentStep (props : FeedbackContentStepProps) {
     const [screenshot, setScreenshot] = useState<string | null>(null);
     const [comment, setComment] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string | null>(null);
 
     const feedbackTypeInfo = feedbackTypes[props.feedbackType];
 
-    function handleSubmit(event: FormEvent){
+    async function handleSubmit(event: FormEvent){
+        setIsLoading(true);
         event.preventDefault();
 
-        console.log({
-            screenshot, 
-            comment
-        });
-        
-        props.onFeedbackSent();
+        if(comment){
+            await new FeedbackService().post({
+                type: props.feedbackType,
+                comment,
+                screenshot
+            }).then(response => {
+                console.log(response);
+    
+                setIsLoading(false);
+                if(response.status == 201)
+                    props.onFeedbackSent();
+            }).catch(error => {
+                console.log(error);
+    
+                setIsLoading(false);
+                setError(error.response.data.error);
+
+            });
+        }
     }
 
     return (
@@ -73,13 +92,14 @@ export function FeedbackContentStep (props : FeedbackContentStepProps) {
                             focus:ring-2 focus:ring-offset-2 focus:ring-offset-zinc-900 focus:ring-brand-500
                             transition-colors` + (comment == null ? " opacity-50" : "")
                             }
-                        disabled={comment == null}
+                        disabled={comment == null || isLoading}
                     >
-                        Enviar Feedback
+                        {isLoading ? <Loading /> : "Enviar Feedback"}
                     </button>
                 </footer>
-
-
+                {
+                    error != null ? <Error error={error} /> : null
+                }
             </form>
         </>
     )

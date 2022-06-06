@@ -37,8 +37,8 @@ export const feedbackTypes = {
 export type FeedbackType = keyof typeof feedbackTypes;
 
 export function FeedbackForm() {
-    const [feedbackType, setFeedbackType] = useState<FeedbackType | null>("BUG");
-    const [feedbackComplete, setFeedbackComplete] = useState(true);
+    const [feedbackType, setFeedbackType] = useState<FeedbackType | null>(null);
+    const [feedbackComplete, setFeedbackComplete] = useState(false);
 
     function handleRestartFeedback() {
         setFeedbackType(null);
