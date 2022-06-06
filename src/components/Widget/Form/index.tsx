@@ -6,6 +6,7 @@ import {
     Image,
     Text,
     TouchableOpacity } from 'react-native';
+import * as FileSystem from 'expo-file-system';
 import { theme } from '../../../theme';
 import { FeedbackTypeKey, feedbackTypes } from '../../../utils/feedbackTypes';
 import { Button } from './Button';
@@ -14,6 +15,7 @@ import { ScreenshotButton } from '../ScreenshotButton';
 import { styles } from './styles';
 import { captureScreen } from 'react-native-view-shot';
 import { Copyright } from '../Copyright';
+import { FeedbackService } from '../../../services/feedbackService';
 
 interface FormProps {
     feedbackType: FeedbackTypeKey;
@@ -23,7 +25,7 @@ interface FormProps {
 
 export function Form({feedbackType, onBack, onSuccess}:FormProps) {
     const feedbackTypeInfo = feedbackTypes[feedbackType];
-    const [comment, setComment] = useState<string | null>(null);
+    const [comment, setComment] = useState<string>("");
     const [screenshot, setScreenShot] = useState<string | null>(null);
     const [isSendingFeedback, setIsSendingFeedback] = useState(false);
     const [isTakingScreenshot, setIsTakingScreenshot] = useState(false);
@@ -51,9 +53,23 @@ export function Form({feedbackType, onBack, onSuccess}:FormProps) {
 
     async function handleSubmit(){
         setIsSendingFeedback(true);
-
         try {
-            
+            var screenshotB64 = screenshot && await FileSystem.readAsStringAsync(screenshot, {
+                encoding: 'base64'
+            });
+
+            new FeedbackService().sendFeedback({
+                comment,
+                type: feedbackType,
+                screenshot: `data:image/jpg;base64,${screenshotB64}`
+            }).then(result => {
+                console.log("Feedback enviado: ", result);
+                setIsSendingFeedback(false);
+                onSuccess();
+            }).catch(error => {
+                console.error("Erro ao enviar feedback: ", error);
+                setIsSendingFeedback(false);
+            });
         } catch (error) {
             console.error("Erro ao enviar feedback: ", error);
             setIsSendingFeedback(false);
@@ -100,7 +116,7 @@ export function Form({feedbackType, onBack, onSuccess}:FormProps) {
             <Button 
                 isLoading={isSendingFeedback}
                 onPress={() => handleSubmit()}
-                disabled={comment == null || isSendingFeedback}
+                disabled={comment == "" || isSendingFeedback}
             />
         </View>
         <Copyright />
