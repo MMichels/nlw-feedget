@@ -8,6 +8,6 @@ app.use(express.json());
 app.use(routes);
 
 
-app.listen(3333, () => {
+app.listen(process.env.PROT || 3333, () => {
     console.log("HTTP server running")
 })
