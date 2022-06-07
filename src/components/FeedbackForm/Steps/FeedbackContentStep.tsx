@@ -71,8 +71,7 @@ export function FeedbackContentStep (props : FeedbackContentStepProps) {
                         text-sm placeholder-zinc-400 text-zinc-100 
                         bg-transparent rounded-md border-zinc-600
                         focus:border-brand-500 focus:ring-brand-500 focus:ring-1 focus:outline-none
-                        resize-none
-                        scrollbar scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin
+                        resize-none scrollbar-thumb-zinc-700 scrollbar-track-transparent scrollbar-thin
                         "
                     placeholder={feedbackTypeInfo.placeholder}
                     onChange={(ev) => setComment(ev.target.value)}
