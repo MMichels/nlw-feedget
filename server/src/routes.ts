@@ -7,6 +7,7 @@ export const routes = express.Router();
 
 routes.post("/feedback", async (req, res) => {
     var {type, comment, screenshot} = req.body;
+    
     const useCase = new SubmitFeedbackUseCase(
         new PrismaFeedbackRepository(),
         new NodeMailerAdapter()  
